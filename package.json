@@ -27,7 +27,7 @@
   "license": "MIT",
   "description": "DeFi execution layer for AI agents, including Casper AgentGuard policy and receipt anchoring on Casper Testnet.",
   "dependencies": {
-    "@cetusprotocol/aggregator-sdk": "^1.4.5",
+    "@cetusprotocol/aggregator-sdk": "^1.6.6",
     "@ember-finance/sdk": "1.0.9",
     "@modelcontextprotocol/sdk": "^1.26.0",
     "@mysten/deepbook-v3": "^0.28.3",
