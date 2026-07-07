@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  casper-agentguard:
+    name: Casper AgentGuard
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2025-03-01
+          targets: wasm32-unknown-unknown
+          components: rust-src
+
+      - name: Build AgentGuard Wasm
+        run: make build-contract
+        working-directory: contracts/casper-agentguard
+
+      - name: Verify Wasm artifact
+        run: test -s contract/target/wasm32-unknown-unknown/release/casper_agentguard.wasm
+        working-directory: contracts/casper-agentguard
+
+  arsenal-smoke:
+    name: Arsenal Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Casper AgentGuard smoke test
+        run: >
+          npx ts-node --transpile-only -P scripts/tsconfig.json
+          -r tsconfig-paths/register
+          -e "import { executeCasperAgentGuardSkill } from './src/skills/casper-agentguard';
+          executeCasperAgentGuardSkill({ action: 'build_agent_receipt', agent_id: 'ci', action_name: 'receipt.test', policy: { allow: true }, proposal: { id: 'ci' }, decision: { allow: true }, receipt: { status: 'ok' } })
+          .then((r) => { if (!r.success || !r.output?.policy_hash) process.exit(1); console.log(r.output.policy_hash); });"

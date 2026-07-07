@@ -1,0 +1,327 @@
+{
+  "project": "Sumplus Arsenal - Skills Platform for Agents",
+  "description": "A comprehensive platform for agents to discover, search, and use skills, with support for MCP, function calling, and web interface",
+  "techStack": "Next.js 14, TypeScript, Supabase, Tailwind CSS, shadcn/ui",
+  "features": [
+    {
+      "id": "feature-001",
+      "title": "Project foundation and database schema",
+      "description": "Set up Next.js project with TypeScript, Supabase integration, and define database schema for skills, users, ratings, and payments",
+      "priority": 1,
+      "status": "completed",
+      "category": "infrastructure",
+      "testCriteria": [
+        "Next.js project runs successfully",
+        "Supabase client connects",
+        "Database tables created (skills, users, ratings, payments)",
+        "TypeScript compilation works",
+        "Environment variables configured"
+      ]
+    },
+    {
+      "id": "feature-002",
+      "title": "Skills data model and API foundation",
+      "description": "Create Skills model with metadata (name, description, category, author, version), implement basic CRUD API routes",
+      "priority": 2,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "Skills table has all required fields",
+        "API endpoint POST /api/skills creates skill",
+        "API endpoint GET /api/skills lists skills",
+        "API endpoint GET /api/skills/:id retrieves skill",
+        "API endpoint PUT /api/skills/:id updates skill",
+        "API endpoint DELETE /api/skills/:id deletes skill"
+      ]
+    },
+    {
+      "id": "feature-003",
+      "title": "Skills search and filtering",
+      "description": "Implement full-text search, category filtering, tag filtering, and sorting capabilities for skills",
+      "priority": 3,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "Search by name works",
+        "Search by description works",
+        "Filter by category works",
+        "Filter by tags works",
+        "Sort by rating works",
+        "Sort by recent works",
+        "Pagination works correctly"
+      ]
+    },
+    {
+      "id": "feature-004",
+      "title": "Web interface - Home and Browse page",
+      "description": "Create responsive home page with featured skills, search bar, and browse page with grid/list view",
+      "priority": 4,
+      "status": "completed",
+      "category": "frontend",
+      "testCriteria": [
+        "Home page loads and displays featured skills",
+        "Search bar is functional",
+        "Browse page shows all skills in grid view",
+        "Can switch between grid and list view",
+        "Responsive design works on mobile",
+        "Loading states are shown"
+      ]
+    },
+    {
+      "id": "feature-005",
+      "title": "Web interface - Skill detail page",
+      "description": "Create skill detail page showing full description, usage examples, ratings, comments, and try-it functionality",
+      "priority": 5,
+      "status": "completed",
+      "category": "frontend",
+      "testCriteria": [
+        "Detail page shows all skill information",
+        "Usage examples are displayed clearly",
+        "Related skills are shown",
+        "Breadcrumb navigation works",
+        "Copy code snippets works",
+        "Share button works"
+      ]
+    },
+    {
+      "id": "feature-006",
+      "title": "User authentication system",
+      "description": "Implement user signup/login with Supabase Auth, support for both human users and agent authentication",
+      "priority": 6,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "User can sign up with email/password",
+        "User can log in",
+        "User can log out",
+        "Agent can authenticate with API key",
+        "Session persistence works",
+        "Protected routes redirect to login"
+      ]
+    },
+    {
+      "id": "feature-007",
+      "title": "Skill upload system",
+      "description": "Create upload interface for official and third-party users to submit skills with validation and moderation queue",
+      "priority": 7,
+      "status": "completed",
+      "category": "fullstack",
+      "testCriteria": [
+        "Upload form validates all required fields",
+        "JSON schema validation works",
+        "Skills are created with pending status",
+        "Official users can publish immediately",
+        "Third-party submissions go to moderation",
+        "Upload confirmation is shown"
+      ]
+    },
+    {
+      "id": "feature-008",
+      "title": "Rating and review system",
+      "description": "Implement rating (1-5 stars) and review functionality with aggregated scores and comment threads",
+      "priority": 8,
+      "status": "completed",
+      "category": "fullstack",
+      "testCriteria": [
+        "Users can rate skills (1-5 stars)",
+        "Users can write reviews",
+        "Average rating is calculated correctly",
+        "Reviews are displayed on skill page",
+        "One rating per user per skill enforced",
+        "Review editing works"
+      ]
+    },
+    {
+      "id": "feature-009",
+      "title": "MCP interface",
+      "description": "Implement Model Context Protocol (MCP) interface for skills discovery and usage by AI agents",
+      "priority": 9,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "MCP endpoint /mcp/list-skills returns skills",
+        "MCP endpoint /mcp/get-skill/:id returns skill details",
+        "MCP endpoint /mcp/execute-skill executes skill",
+        "MCP protocol format is correct",
+        "Authentication works with MCP",
+        "Error handling follows MCP spec"
+      ]
+    },
+    {
+      "id": "feature-010",
+      "title": "Function calling interface",
+      "description": "Implement OpenAI-compatible function calling interface for agents to discover and use skills",
+      "priority": 10,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "Endpoint returns OpenAI function format",
+        "Function schemas are valid",
+        "Function execution works",
+        "Parameters are validated",
+        "Results are returned in correct format",
+        "Error handling works"
+      ]
+    },
+    {
+      "id": "feature-011",
+      "title": "Skills execution API",
+      "description": "Create unified API for executing skills with input validation, timeout handling, and result formatting",
+      "priority": 11,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "POST /api/execute endpoint exists",
+        "Input validation works",
+        "Skills execute successfully",
+        "Timeouts are handled",
+        "Results are formatted correctly",
+        "Errors are reported properly"
+      ]
+    },
+    {
+      "id": "feature-012",
+      "title": "SUI blockchain skill",
+      "description": "Create official skill for SUI blockchain operations (query balance, send transaction, get block info)",
+      "priority": 12,
+      "status": "completed",
+      "category": "skills",
+      "testCriteria": [
+        "Skill schema is defined",
+        "Query balance function works",
+        "Send transaction function works",
+        "Get block info function works",
+        "Error handling is robust",
+        "Documentation is complete"
+      ]
+    },
+    {
+      "id": "feature-013",
+      "title": "Crypto wallet skill",
+      "description": "Create skill for interacting with crypto wallets (check balance, generate address, sign message)",
+      "priority": 13,
+      "status": "completed",
+      "category": "skills",
+      "testCriteria": [
+        "Check balance works for multiple chains",
+        "Generate address works",
+        "Sign message works",
+        "Supports multiple wallet types",
+        "Security best practices followed",
+        "Documentation is clear"
+      ]
+    },
+    {
+      "id": "feature-014",
+      "title": "Sumplus Yield service skill",
+      "description": "Create skill for interacting with Sumplus Yield service from sumpl.us (get rates, calculate yield, invest)",
+      "priority": 14,
+      "status": "completed",
+      "category": "skills",
+      "testCriteria": [
+        "Get yield rates works",
+        "Calculate potential yield works",
+        "Invest function works",
+        "Get user positions works",
+        "Integration with sumpl.us API works",
+        "Documentation references sumpl.us"
+      ]
+    },
+    {
+      "id": "feature-015",
+      "title": "X402 payment integration",
+      "description": "Implement X402 payment protocol for paid skills and future MCP services with payment verification",
+      "priority": 15,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "X402 payment endpoint exists",
+        "Payment verification works",
+        "Paid skills require payment",
+        "Payment receipts are stored",
+        "Refund mechanism works",
+        "Payment status tracking works"
+      ]
+    },
+    {
+      "id": "feature-016",
+      "title": "Router functionality",
+      "description": "Implement arsenal as a router - agents use arsenal's unified API to access any skill without installation",
+      "priority": 16,
+      "status": "completed",
+      "category": "backend",
+      "testCriteria": [
+        "Single API endpoint routes to skills",
+        "Skill discovery works through router",
+        "Execution is proxied correctly",
+        "No skill installation needed by agents",
+        "Router handles errors gracefully",
+        "Performance is acceptable"
+      ]
+    },
+    {
+      "id": "feature-017",
+      "title": "Admin dashboard",
+      "description": "Create admin interface for managing skills, users, reviewing submissions, and monitoring system",
+      "priority": 17,
+      "status": "completed",
+      "category": "frontend",
+      "testCriteria": [
+        "Admin can view all skills",
+        "Admin can approve/reject submissions",
+        "Admin can edit any skill",
+        "Admin can view user list",
+        "Admin can view system stats",
+        "Admin dashboard is protected"
+      ]
+    },
+    {
+      "id": "feature-018",
+      "title": "API documentation",
+      "description": "Create comprehensive API documentation with examples for all interfaces (REST, MCP, Function Calling)",
+      "priority": 18,
+      "status": "completed",
+      "category": "documentation",
+      "testCriteria": [
+        "REST API docs are complete",
+        "MCP interface docs are complete",
+        "Function calling docs are complete",
+        "Code examples work",
+        "Authentication is documented",
+        "Error codes are documented"
+      ]
+    },
+    {
+      "id": "feature-019",
+      "title": "End-to-end testing",
+      "description": "Create comprehensive test suite covering all features with Playwright for E2E and Jest for unit tests",
+      "priority": 19,
+      "status": "pending",
+      "category": "testing",
+      "testCriteria": [
+        "All API endpoints have tests",
+        "All pages have E2E tests",
+        "Search functionality is tested",
+        "Authentication flows are tested",
+        "Payment flows are tested",
+        "All tests pass"
+      ]
+    },
+    {
+      "id": "feature-020",
+      "title": "Deployment and production setup",
+      "description": "Deploy to Vercel, configure production Supabase, set up monitoring and analytics",
+      "priority": 20,
+      "status": "pending",
+      "category": "devops",
+      "testCriteria": [
+        "Application deploys to Vercel",
+        "Production database is configured",
+        "Environment variables are set",
+        "HTTPS works",
+        "Monitoring is active",
+        "Performance is acceptable"
+      ]
+    }
+  ]
+}

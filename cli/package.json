@@ -1,0 +1,29 @@
+{
+  "name": "@sumplus/arsenal",
+  "version": "1.0.0",
+  "description": "CLI for discovering and browsing Sumplus Arsenal skills",
+  "bin": {
+    "arsenal": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,442 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifestVersion": "1.0.0",
+  "project": {
+    "name": "Sumplus Arsenal",
+    "identifier": "sumplus-arsenal",
+    "version": "1.0.0",
+    "tagline": "The skills marketplace for AI agents",
+    "description": "A curated marketplace of executable skills for autonomous AI agents. Agents can discover skills by semantic search, execute them via REST or MCP, and pay per-execution using the x402 protocol (USDC on Base).",
+    "repository": "https://github.com/sumplus-real/arsenal",
+    "homepage": "https://arsenal.sumplus.ai",
+    "documentation": "https://arsenal.sumplus.ai/docs",
+    "license": "MIT",
+    "author": {
+      "name": "Sumplus",
+      "email": "hello@sumplus.ai",
+      "url": "https://sumplus.ai"
+    }
+  },
+
+  "capabilities": [
+    "Semantic skill discovery via vector embeddings (Qwen text-embedding-v4)",
+    "Skill execution with structured JSON input/output",
+    "Per-execution micropayments via x402 protocol (USDC on Base)",
+    "MCP-compatible interface for agent frameworks",
+    "Community skill publishing with automatic embedding generation",
+    "1–5 star skill rating system"
+  ],
+
+  "techStack": {
+    "framework": "Next.js 16 (App Router)",
+    "runtime": "Node.js 18+",
+    "language": "TypeScript 5",
+    "database": "PostgreSQL 15+ (Supabase)",
+    "vectorDB": "pgvector",
+    "embedding": "Qwen text-embedding-v4 (via OpenAI-compatible API)",
+    "authentication": "Supabase Auth",
+    "payments": "x402 protocol (USDC on Base/Base Sepolia)",
+    "ui": "React 18, Tailwind CSS, Framer Motion",
+    "testing": "Jest (API), Playwright (E2E)"
+  },
+
+  "endpoints": {
+    "baseUrl": "https://arsenal.sumplus.ai",
+    "apiBasePath": "/api",
+    "manifest": "/api/manifest",
+    "interfaces": {
+      "rest": {
+        "description": "Standard JSON REST API",
+        "basePath": "/api",
+        "contentType": "application/json",
+        "endpoints": [
+          "GET /api/skills",
+          "GET /api/skills/:id",
+          "POST /api/skills",
+          "POST /api/execute",
+          "POST /api/skills/:id/rate",
+          "GET /api/categories"
+        ]
+      },
+      "mcp": {
+        "description": "Model Context Protocol endpoint",
+        "url": "/mcp",
+        "method": "POST",
+        "version": "2024-11-05",
+        "methods": ["skills/list", "skills/get", "skills/execute"]
+      },
+      "router": {
+        "description": "Unified agent router",
+        "url": "/api/router",
+        "method": "POST",
+        "actions": ["search", "get", "execute"]
+      }
+    }
+  },
+
+  "authentication": {
+    "type": "Bearer token",
+    "description": "All write and execute endpoints require Authorization header",
+    "methods": {
+      "signup": {
+        "endpoint": "POST /api/auth/signup",
+        "public": true
+      },
+      "login": {
+        "endpoint": "POST /api/auth/login",
+        "public": true
+      },
+      "apiKey": {
+        "endpoint": "POST /api/auth/apikey",
+        "description": "Generate persistent API key (requires login token)",
+        "requiresAuth": true
+      }
+    },
+    "headerFormat": "Authorization: Bearer <token_or_api_key>"
+  },
+
+  "payments": {
+    "protocol": "x402",
+    "description": "Per-execution micropayments for paid skills",
+    "currency": "USDC",
+    "networks": ["base", "base-sepolia"],
+    "contracts": {
+      "base": {
+        "usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      "base-sepolia": {
+        "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+      }
+    },
+    "facilitator": "https://x402.org/facilitator",
+    "httpStatus": 402,
+    "paymentHeader": "X-PAYMENT",
+    "npmPackages": ["x402-fetch", "x402-axios"]
+  },
+
+  "quickStart": {
+    "installation": [
+      "git clone https://github.com/sumplus-real/arsenal.git",
+      "cd arsenal",
+      "npm install",
+      "cp .env.local.example .env.local",
+      "# Configure environment variables in .env.local",
+      "npm run dev"
+    ],
+    "requiredEnv": [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "OPENAI_API_KEY",
+      "OPENAI_BASE_URL",
+      "EMBEDDING_MODEL",
+      "EMBEDDING_DIMENSIONS"
+    ],
+    "optionalEnv": [
+      "X402_NETWORK",
+      "X402_PAYMENT_RECIPIENT",
+      "X402_FACILITATOR_URL"
+    ],
+    "databaseSetup": [
+      "1. Run supabase-schema.sql in Supabase SQL Editor",
+      "2. Run seeds/official-skills.sql",
+      "3. Run seeds/uniswap-skills.sql (optional)",
+      "4. Call POST /api/admin/backfill-embeddings to generate embeddings"
+    ]
+  },
+
+  "apiExamples": {
+    "searchSkills": {
+      "description": "Semantic search for skills",
+      "request": {
+        "method": "GET",
+        "url": "/api/skills?search=swap+tokens+on+uniswap&limit=5"
+      },
+      "response": {
+        "skills": [
+          {
+            "id": "uuid",
+            "name": "Uniswap Token Swap",
+            "description": "Execute token swap on Uniswap V3...",
+            "category": "Blockchain",
+            "tags": ["uniswap", "defi", "swap"],
+            "is_paid": true,
+            "price": 2.50
+          }
+        ],
+        "total": 1
+      }
+    },
+    "executeSkill": {
+      "description": "Execute a free skill",
+      "request": {
+        "method": "POST",
+        "url": "/api/execute",
+        "headers": {
+          "Authorization": "Bearer <token>",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "skill_id": "uuid",
+          "input": {
+            "chain": "ethereum",
+            "tokenIn": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            "tokenOut": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+            "amountIn": "1000000000"
+          }
+        }
+      },
+      "response": {
+        "success": true,
+        "execution_id": "uuid",
+        "output": {
+          "amountOut": "308765432109876543",
+          "priceImpact": 0.08
+        }
+      }
+    },
+    "paidSkillFlow": {
+      "description": "Execute a paid skill with x402",
+      "step1": {
+        "description": "First call returns 402 with payment requirements",
+        "request": {
+          "method": "POST",
+          "url": "/api/execute",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "body": {
+            "skill_id": "uuid",
+            "input": {}
+          }
+        },
+        "response": {
+          "status": 402,
+          "body": {
+            "x402Version": 1,
+            "accepts": [
+              {
+                "network": "base-sepolia",
+                "asset": "USDC",
+                "payTo": "0x...",
+                "maxAmountRequired": "2500000"
+              }
+            ]
+          }
+        }
+      },
+      "step2": {
+        "description": "Agent pays via x402-fetch, retries with X-PAYMENT header",
+        "request": {
+          "method": "POST",
+          "url": "/api/execute",
+          "headers": {
+            "Authorization": "Bearer <token>",
+            "X-PAYMENT": "<base64-encoded-payment-payload>"
+          },
+          "body": {
+            "skill_id": "uuid",
+            "input": {}
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "success": true,
+            "output": {}
+          }
+        }
+      }
+    }
+  },
+
+  "integrationGuides": {
+    "curl": {
+      "search": "curl 'https://arsenal.sumplus.ai/api/skills?search=DeFi+analytics'",
+      "auth": "curl -X POST https://arsenal.sumplus.ai/api/auth/signup -H 'Content-Type: application/json' -d '{\"email\":\"agent@example.com\",\"password\":\"secure123\",\"name\":\"My Agent\"}'",
+      "execute": "curl -X POST https://arsenal.sumplus.ai/api/execute -H 'Authorization: Bearer <token>' -H 'Content-Type: application/json' -d '{\"skill_id\":\"uuid\",\"input\":{}}'"
+    },
+    "javascript": {
+      "description": "Node.js / Browser integration",
+      "install": "npm install x402-fetch",
+      "code": "import { x402Fetch } from 'x402-fetch';\n\n// Auto-handles 402 payments\nconst response = await x402Fetch('https://arsenal.sumplus.ai/api/execute', {\n  method: 'POST',\n  headers: {\n    'Authorization': `Bearer ${token}`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ skill_id, input })\n});\n\nconst result = await response.json();"
+    },
+    "python": {
+      "description": "Python integration",
+      "install": "pip install x402",
+      "code": "from x402 import X402Session\n\nsession = X402Session()\nresponse = session.post(\n    'https://arsenal.sumplus.ai/api/execute',\n    headers={'Authorization': f'Bearer {token}'},\n    json={'skill_id': skill_id, 'input': input_data}\n)\nresult = response.json()"
+    },
+    "mcp": {
+      "description": "Model Context Protocol integration",
+      "config": {
+        "mcpServers": {
+          "arsenal": {
+            "url": "https://arsenal.sumplus.ai/mcp",
+            "transport": {
+              "type": "http"
+            }
+          }
+        }
+      },
+      "usage": "// In MCP-compatible agent framework\nawait mcp.callMethod('skills/list', { search: 'blockchain analytics' });\nawait mcp.callMethod('skills/execute', { skill_id, input });"
+    }
+  },
+
+  "skillSchema": {
+    "description": "Structure for creating new skills",
+    "required": ["name", "description", "category", "schema"],
+    "properties": {
+      "name": {
+        "type": "string",
+        "maxLength": 200,
+        "description": "Skill display name"
+      },
+      "description": {
+        "type": "string",
+        "description": "Detailed description of what the skill does"
+      },
+      "category": {
+        "type": "string",
+        "enum": ["Blockchain", "Finance", "Data", "Productivity", "AI/ML", "Communication", "Security", "Analytics"],
+        "description": "Primary category"
+      },
+      "tags": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "Searchable tags"
+      },
+      "schema": {
+        "type": "object",
+        "required": ["input", "output"],
+        "properties": {
+          "input": {
+            "type": "object",
+            "description": "JSON Schema for skill input"
+          },
+          "output": {
+            "type": "object",
+            "description": "JSON Schema for skill output"
+          }
+        }
+      },
+      "code": {
+        "type": "string",
+        "description": "Implementation code or pseudocode"
+      },
+      "usage_examples": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "description": {"type": "string"},
+            "input": {"type": "object"},
+            "expected_output": {"type": "object"}
+          }
+        }
+      },
+      "is_paid": {
+        "type": "boolean",
+        "default": false
+      },
+      "price": {
+        "type": "number",
+        "description": "USD price per execution (required if is_paid=true)"
+      }
+    }
+  },
+
+  "deployment": {
+    "recommended": ["Vercel", "Railway", "Fly.io", "Render"],
+    "requirements": {
+      "node": "18.17.0+",
+      "database": "PostgreSQL 15+ with pgvector extension",
+      "storage": "For auth and user data",
+      "env": "Environment variables configured"
+    },
+    "vercel": {
+      "buildCommand": "npm run build",
+      "outputDirectory": ".next",
+      "installCommand": "npm install",
+      "envVars": "Configure in Vercel dashboard → Settings → Environment Variables"
+    },
+    "docker": {
+      "image": "node:18-alpine",
+      "buildSteps": [
+        "FROM node:18-alpine",
+        "WORKDIR /app",
+        "COPY package*.json ./",
+        "RUN npm ci",
+        "COPY . .",
+        "RUN npm run build",
+        "EXPOSE 3000",
+        "CMD [\"npm\", \"start\"]"
+      ]
+    }
+  },
+
+  "testing": {
+    "api": {
+      "framework": "Jest",
+      "command": "npm run test:api",
+      "coverage": "47 test cases",
+      "description": "Integration tests against live localhost:3000"
+    },
+    "e2e": {
+      "framework": "Playwright",
+      "command": "npm run test:e2e",
+      "coverage": "13 test cases",
+      "description": "Headless Chromium browser tests"
+    }
+  },
+
+  "community": {
+    "issues": "https://github.com/sumplus-real/arsenal/issues",
+    "discussions": "https://github.com/sumplus-real/arsenal/discussions",
+    "contributing": "See DEVELOPMENT.md for contribution guidelines",
+    "codeOfConduct": "Be respectful and collaborative"
+  },
+
+  "resources": {
+    "documentation": [
+      {
+        "name": "Architecture Guide",
+        "path": "/ARCHITECTURE.md",
+        "description": "System design, DB schema, request flows"
+      },
+      {
+        "name": "API Reference",
+        "path": "/API.md",
+        "description": "Complete endpoint documentation"
+      },
+      {
+        "name": "Development Guide",
+        "path": "/DEVELOPMENT.md",
+        "description": "Setup, patterns, testing, gotchas"
+      }
+    ],
+    "externalDocs": [
+      {
+        "name": "x402 Protocol",
+        "url": "https://x402.org",
+        "description": "Payment protocol specification"
+      },
+      {
+        "name": "MCP Specification",
+        "url": "https://modelcontextprotocol.io",
+        "description": "Model Context Protocol docs"
+      },
+      {
+        "name": "pgvector",
+        "url": "https://github.com/pgvector/pgvector",
+        "description": "PostgreSQL vector extension"
+      }
+    ]
+  },
+
+  "metadata": {
+    "createdAt": "2025-01-19",
+    "lastUpdated": "2026-02-20",
+    "status": "production",
+    "maintenance": "active"
+  }
+}

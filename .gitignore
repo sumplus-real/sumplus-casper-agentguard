@@ -1,0 +1,55 @@
+# Claude Harness
+.claude-session
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+target/
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Claude Code harness
+.claude/scheduled_tasks.lock
+
+# AgentTalk inter-session messaging
+.agentalk/
+
+# Supabase CLI local cache
+supabase/.temp/
+
+# pnpm lockfile — this project standardizes on npm (package-lock.json is canonical)
+pnpm-lock.yaml
+
+# Local scratch / debug test scripts
+/tmp/
+/tmp-test/
+test-*-local.ts

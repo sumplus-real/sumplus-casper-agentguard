@@ -1,0 +1,15 @@
+[package]
+name = "casper_agentguard"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+casper-contract = "5.1.1"
+casper-types = "6.1.0"
+
+[[bin]]
+name = "casper_agentguard"
+path = "src/main.rs"
+bench = false
+doctest = false
+test = false
