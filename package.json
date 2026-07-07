@@ -34,7 +34,7 @@
     "@mysten/sui": "^1.45.2",
     "@scallop-io/sui-scallop-sdk": "^2.4.4",
     "@suilend/sdk": "^2.0.4",
-    "@suilend/sui-fe": "^3.0.1",
+    "@suilend/sui-fe": "^3.0.13",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.95.3",
     "@tailwindcss/postcss": "^4.1.18",
