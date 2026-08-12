@@ -29,7 +29,7 @@
   "dependencies": {
     "@cetusprotocol/aggregator-sdk": "^1.4.5",
     "@ember-finance/sdk": "1.0.9",
-    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
     "@mysten/deepbook-v3": "^0.28.3",
     "@mysten/sui": "^1.45.2",
     "@scallop-io/sui-scallop-sdk": "^2.4.4",
