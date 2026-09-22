@@ -47,7 +47,7 @@
     "framer-motion": "^12.34.1",
     "kriya-dex-sdk": "^2.0.8",
     "lucide-react": "^0.564.0",
-    "mppx": "^0.4.11",
+    "mppx": "^0.8.2",
     "navi-sdk": "^1.7.3",
     "next": "^16.2.6",
     "postcss": "^8.5.6",
